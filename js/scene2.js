@@ -139,7 +139,6 @@ function removeDays(ul, length, target){//done
 
 material2 = new THREE.ShaderMaterial({
     uniforms: {
-      tExplosion: THREE.UniformsUtils.clone(standard.uniforms),
       time: {
         type: "f",
         value: 0.0
@@ -161,7 +160,8 @@ material2 = new THREE.ShaderMaterial({
       }	
     },
     vertexShader: document.getElementById( 'vertexShader' ).textContent,
-    fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+    fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+    transparent: true,
 });
 
 mesh = new THREE.Mesh(

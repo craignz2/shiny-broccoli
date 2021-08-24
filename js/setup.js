@@ -438,6 +438,7 @@ document.getElementById("form4submit").addEventListener("click", function(event)
 
 document.getElementById("checkboxSubmit").addEventListener("click", function(event) {
     event.preventDefault();
+    console.log(sceneIndex);
     if(sceneIndex === 5 && checkboxTicked === true){
 
         document.getElementById("checkboxform").classList.remove("visible");
@@ -450,7 +451,7 @@ document.getElementById("checkboxSubmit").addEventListener("click", function(eve
         document.getElementById("indexText4").classList.add("fadeInText");*/
         //fade out nav
        // document.getElementById("nav").classList.add("fadeOut");
-            var formAge = Math.round((2021-year)).toString()+"-"+Math.round(month).toString()+"-"+Math.round(day).toString();
+        var formAge = Math.round((2021-year)).toString()+"-"+Math.round(month).toString()+"-"+Math.round(day).toString();
         
         if(idType === "passport"){
             var formdata = new FormData();
@@ -469,7 +470,7 @@ document.getElementById("checkboxSubmit").addEventListener("click", function(eve
             redirect: 'follow'
             };
 
-            fetch("https://vype.zyber.co.nz/api/verifyId", requestOptions)
+            fetch("https://age-verification-api.vercel.app/", requestOptions)
             .then(response => response.text())
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
@@ -491,13 +492,13 @@ document.getElementById("checkboxSubmit").addEventListener("click", function(eve
             redirect: 'follow'
             };
 
-            fetch("https://vype.zyber.co.nz/api/verifyId", requestOptions)
+            fetch("https://age-verification-api.vercel.app/", requestOptions)
             .then(response => /*response.text()*/console.log(response.text()))
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
         }
 
-        /*
+        
         if(response === error){
             document.getElementById("outro1").children[0].innerHTML = "VERIFICATION FAILED";
             document.getElementById("outro1").children[1].innerHTML = "PLEASE MAKE SURE ALL DETAILS ENTERED ARE CORRECT";
@@ -513,7 +514,7 @@ document.getElementById("checkboxSubmit").addEventListener("click", function(eve
             },1000);
             sceneIndex++;
         }
-        */
+        
     }
 });
 
