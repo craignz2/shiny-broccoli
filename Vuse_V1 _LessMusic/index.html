@@ -1,0 +1,446 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Vuse Age verification</title>
+    <meta name="description" content="Vuse Age Verification">
+
+    <link rel="stylesheet" href="style.css">
+  </head>
+
+  <body>
+      <!--<canvas class="gradient" id="gradients2"></canvas>-->
+      <canvas class="gradient" id="gradients"></canvas>
+      <div id="nav" class=invisible>
+        <span class="indexBar" id="indexBar1"><p class="indexText" id="indexText1">ATMOSPHERE</p></span>
+        <span class="indexBar" id="indexBar2"><p class="indexText" id="indexText2">BASS</p></span>
+        <span class="indexBar" id="indexBar3"><p class="indexText" id="indexText3">BEATS</p></span>
+        <span class="indexBar" id="indexBar4"><p class="indexText" id="indexText4">MELODY</p></span>
+      </div>
+
+      <a id="exit" href="https://vuse.co.nz/" class="hint">NO THANKS, I'LL JUST FILL OUT THE REGULAR FORM.</a>
+      <span id="hint1" class="hint invisible">SOUND ON<span id="soundimg"></span></span>
+    <div class="scene" id="intro">
+            <div class="intro" id="intro1">
+        <p class="t1">VERIFY YOUR AGE</p>
+        <p class="t2">AND MIX YOUR OWN MUSIC TRACK.</p>
+        <div id="loadDiv">
+          <div class="Sound" id="loadanim">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div id="loadText">
+            LOADING
+          </div>
+        </div>
+        <span id="load" style="width:0%; background-color:rgba(255,255,255,1); visibility: hidden;"></span>
+        <input type="submit" value="LET'S GO" class="button_red" id="continueIntro" style="color: rgba(255,255,255,0); background-color: rgba(255,0,0,0);">
+      </div>
+
+      <div class="invisible intro" id="intro2">
+        <p class="t1">SELECT A GENRE</p>
+        <input type="submit" value="HOUSE" id="house" class="button_blur genre g1">
+        <input type="submit" value="DRUM & BASS" id="dnb" class="button_blur genre g2">
+        <input type="submit" value="HIP HOP" id="hiphop" class="button_blur genre g3">
+        <span id="hint2" class="hint">MAKE SURE TO USE HEADPHONES<br>FOR THE BEST EXPERIENCE</span>
+      </div>
+
+      <form class="invisible form" id="form1" autocomplete="off">
+        <!--<label for="fname" style="display:block;width:100%;text-align: center;">ENTER YOUR NAME</label> -->
+        <button class="button_blur" type="button" id="entername">ENTER YOUR FIRST NAME</button>
+        <input id="fname" class="inputfield invisible" type="text" placeholder="START TYPING" name="fname">
+        <input id="mname" class="inputfield invisible" type="text" placeholder="START TYPING" name="mname">
+        <input id="lname" class="inputfield invisible" type="text" placeholder="START TYPING" name="lname"><br>
+        <input class="button_blur invisible" type="submit" value="ENTER YOUR MIDDLE NAME" id="form1submit" style="backdrop-filter: blur(3px);">
+        <button id="skipmiddlename" type="button" class="invisible">OR SKIP TO LAST NAME &#8594;</button>
+      </form>
+
+      <form class="invisible form" id="form2">
+        <button class="button_blur" id="enterdob">SELECT YOUR BIRTH DATE</button>
+        <ul id="days" class="snapContainer invisible">
+          <li class="snapChild">&nbsp;</li>
+          <li class="snapChild">&nbsp;</li>
+          <li class="snapChild">1</li>
+          <li class="snapChild">2</li>
+          <li class="snapChild">3</li>
+          <li class="snapChild">4</li>
+          <li class="snapChild">5</li>
+          <li class="snapChild">6</li>
+          <li class="snapChild">7</li>
+          <li class="snapChild">8</li>
+          <li class="snapChild">9</li>
+          <li class="snapChild">10</li>
+          <li class="snapChild">11</li>
+          <li class="snapChild">12</li>
+          <li class="snapChild">13</li>
+          <li class="snapChild">14</li>
+          <li class="snapChild">15</li>
+          <li class="snapChild">16</li>
+          <li class="snapChild">17</li>
+          <li class="snapChild">18</li>
+          <li class="snapChild">19</li>
+          <li class="snapChild">20</li>
+          <li class="snapChild">21</li>
+          <li class="snapChild">22</li>
+          <li class="snapChild">23</li>
+          <li class="snapChild">24</li>
+          <li class="snapChild">25</li>
+          <li class="snapChild">26</li>
+          <li class="snapChild">27</li>
+          <li class="snapChild">28</li>
+          <li class="snapChild">29</li>
+          <li class="snapChild">30</li>
+          <li class="snapChild">31</li>
+          <span class="test"></span>
+          <span class="test"></span>
+        </ul>
+        <ul id="months" class="snapContainer invisible">
+          <li class="snapChild">&nbsp;</li>
+          <li class="snapChild">&nbsp;</li>
+          <li class="snapChild">January</li>
+          <li class="snapChild">February</li>
+          <li class="snapChild">March</li>
+          <li class="snapChild">April</li>
+          <li class="snapChild">May</li>
+          <li class="snapChild">June</li>
+          <li class="snapChild">July</li>
+          <li class="snapChild">August</li>
+          <li class="snapChild">September</li>
+          <li class="snapChild">October</li>
+          <li class="snapChild">November</li>
+          <li class="snapChild">December</li>
+          <span class="test"></span>
+          <span class="test"></span>
+        </ul>
+        <ul id="years" class="snapContainer invisible"> 
+        </ul>
+        <button  class="button_blur invisible" type="submit" id="form2submit" disabled>SUBMIT</button>
+        <span class="arrow invisible" id="arrowLeft"></span>
+        <span class="arrow invisible" id="arrowRight"></span>
+        <span id="hint3" class="hint invisible">You must be 18 and over to continue.</span>
+      </form> 
+
+      <form class="invisible form" id="form3">
+        <button class="button_blur" id="entergender">SELECT YOUR GENDER</button>
+        <ul id="gender" class="snapContainer invisible">
+          <li class="snapChild">&nbsp;</li> 
+          <li class="snapChild">&nbsp;</li> 
+          <li id="choose" class="snapChild choosecol">Choose</li>
+          <li class="snapChild">Male</li>
+          <li class="snapChild">Female</li>
+          <li class="snapChild">Other</li>
+          <span class="test"></span>
+          <span class="test"></span>
+        </ul>
+        <input id="xgender" class="inputfield invisible" type="text" placeholder="START TYPING" name="xgender">
+        <input class="button_blur invisible" type="submit" value="Submit" id="form3submit" disabled>
+        <span class="arrow invisible" id="arrowLeftG"></span>
+        <span class="arrow invisible" id="arrowRightG"></span>
+        <!--<span id="hint4" class="hint invisible">We collect this information to verify your age through our age verification data check against your ID only.</span>-->
+      </form>
+
+      <!--<form class="invisible form" id="form4" autocomplete="off">
+        <label for="fname" style="display:block;width:100%;text-align: center;"></label> 
+        <input type="text" placeholder="DRIVERS LICENSE NUMBER" id="fname" name="fname">
+        <input type="text" placeholder="DRIVERS VERSION NUMBER" id="lname" name="fname"><br>
+        <input class="button_blur" type="submit" value="Submit" id="form4submit" style="backdrop-filter: blur(3px);">
+      </form>-->
+
+      <form class="invisible form" id="form4" autocomplete="off">
+        <!--<label for="fname" style="display:block;width:100%;text-align: center;">ENTER YOUR NAME</label> -->
+        <button class="button_blur" id="enterid">DRIVERS LICENCE NUMBER</button>
+        <input id="id1" class="white inputfield invisible" type="text" placeholder="START TYPING" name="id1">
+        <input id="id2" class="white inputfield invisible" type="text" placeholder="START TYPING" name="id2"><br>
+        <input class="button_blur invisible" type="submit" value="LICENSE VERSION NUMBER" id="form4submit">
+      </form>
+
+      <form class="invisible form" id="checkboxform">
+        <!--<label for="fname" style="display:block;width:100%;text-align: center;">ENTER YOUR NAME</label> -->
+        <input id="CheckBox" class="check" type="checkbox" name="checkbox" />
+        <div id="checkText">
+          I confirm that I am authorised to provide the personal details presented and I consent to my information being checked with the document issuer or official recorder holder via third party systems for the purpose of confirming my identity.</div>
+        <input class="button_blur" type="submit" id="checkboxSubmit" value="NEXT">
+      </form>
+
+
+      <!--<form class="invisible form" id="form5" autocomplete="off">
+        <label for="fname" style="display:block;width:100%;text-align: center;"></label> 
+        <input type="text" placeholder="DRIVERS LICENSE NUMBER" id="fname" name="fname">
+        <input type="text" placeholder="DRIVERS VERSION NUMBER" id="lname" name="fname"><br>
+        <input class="button_blur" type="submit" value="Submit" id="form4submit" style="backdrop-filter: blur(3px);">
+      </form>-->
+
+      <form class="invisible intro" id="outro1">
+        <p class="t1">THANKS</p>
+        <p class="t2">YOUR AGE HAS BEEN VERIFIED</p>
+        <input type="submit" value="CONTINUE" class="button_blur" id="continueOutro1" >
+      </form>
+      
+      <form class="invisible intro" id="outro2">
+        <p id="customname" class="t1">DJ</p>
+        <p class="t2">YOUR UNIQUE TRACK IS READY</p>
+        <div class="Sound invisible" id="downloadanim">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <input type="submit" value="DOWNLOAD TRACK" class="button_black" id="download">
+        <input type="submit" value="CONTINUE TO CHECKOUT" class="button_blur" id="continueOutro2">
+      </form>
+    </div>
+
+    <script src="js/three.js"></script>
+    <script src="js/postprocessing.min.js"></script>
+    <script src="js/BufferGeometryUtils.js"></script>
+    <script type="x-shader/x-vertex" id="vertexShader">
+      //
+      // GLSL textureless classic 3D noise "cnoise",
+      // with an RSL-style periodic variant "pnoise".
+      // Author:  Stefan Gustavson (stefan.gustavson@liu.se)
+      // Version: 2011-10-11
+      //
+      // Many thanks to Ian McEwan of Ashima Arts for the
+      // ideas for permutation and gradient selection.
+      //
+      // Copyright (c) 2011 Stefan Gustavson. All rights reserved.
+      // Distributed under the MIT license. See LICENSE file.
+      // https://github.com/ashima/webgl-noise
+      //
+      
+      vec3 mod289(vec3 x)
+      {
+        return x - floor(x * (1.0 / 289.0)) * 289.0;
+      }
+      
+      vec4 mod289(vec4 x)
+      {
+        return x - floor(x * (1.0 / 289.0)) * 289.0;
+      }
+      
+      vec4 permute(vec4 x)
+      {
+        return mod289(((x*34.0)+1.0)*x);
+      }
+      
+      vec4 taylorInvSqrt(vec4 r)
+      {
+        return 1.79284291400159 - 0.85373472095314 * r;
+      }
+      
+      vec3 fade(vec3 t) {
+        return t*t*t*(t*(t*6.0-15.0)+10.0);
+      }
+      
+      // Classic Perlin noise
+      float cnoise(vec3 P)
+      {
+        vec3 Pi0 = floor(P); // Integer part for indexing
+        vec3 Pi1 = Pi0 + vec3(1.0); // Integer part + 1
+        Pi0 = mod289(Pi0);
+        Pi1 = mod289(Pi1);
+        vec3 Pf0 = fract(P); // Fractional part for interpolation
+        vec3 Pf1 = Pf0 - vec3(1.0); // Fractional part - 1.0
+        vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
+        vec4 iy = vec4(Pi0.yy, Pi1.yy);
+        vec4 iz0 = Pi0.zzzz;
+        vec4 iz1 = Pi1.zzzz;
+      
+        vec4 ixy = permute(permute(ix) + iy);
+        vec4 ixy0 = permute(ixy + iz0);
+        vec4 ixy1 = permute(ixy + iz1);
+      
+        vec4 gx0 = ixy0 * (1.0 / 7.0);
+        vec4 gy0 = fract(floor(gx0) * (1.0 / 7.0)) - 0.5;
+        gx0 = fract(gx0);
+        vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);
+        vec4 sz0 = step(gz0, vec4(0.0));
+        gx0 -= sz0 * (step(0.0, gx0) - 0.5);
+        gy0 -= sz0 * (step(0.0, gy0) - 0.5);
+      
+        vec4 gx1 = ixy1 * (1.0 / 7.0);
+        vec4 gy1 = fract(floor(gx1) * (1.0 / 7.0)) - 0.5;
+        gx1 = fract(gx1);
+        vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);
+        vec4 sz1 = step(gz1, vec4(0.0));
+        gx1 -= sz1 * (step(0.0, gx1) - 0.5);
+        gy1 -= sz1 * (step(0.0, gy1) - 0.5);
+      
+        vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);
+        vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);
+        vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);
+        vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);
+        vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);
+        vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);
+        vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);
+        vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);
+      
+        vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));
+        g000 *= norm0.x;
+        g010 *= norm0.y;
+        g100 *= norm0.z;
+        g110 *= norm0.w;
+        vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));
+        g001 *= norm1.x;
+        g011 *= norm1.y;
+        g101 *= norm1.z;
+        g111 *= norm1.w;
+      
+        float n000 = dot(g000, Pf0);
+        float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));
+        float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
+        float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));
+        float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));
+        float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
+        float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));
+        float n111 = dot(g111, Pf1);
+      
+        vec3 fade_xyz = fade(Pf0);
+        vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
+        vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
+        float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);
+        return 2.2 * n_xyz;
+      }
+      
+      // Classic Perlin noise, periodic variant
+      float pnoise(vec3 P, vec3 rep)
+      {
+        vec3 Pi0 = mod(floor(P), rep); // Integer part, modulo period
+        vec3 Pi1 = mod(Pi0 + vec3(1.0), rep); // Integer part + 1, mod period
+        Pi0 = mod289(Pi0);
+        Pi1 = mod289(Pi1);
+        vec3 Pf0 = fract(P); // Fractional part for interpolation
+        vec3 Pf1 = Pf0 - vec3(1.0); // Fractional part - 1.0
+        vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
+        vec4 iy = vec4(Pi0.yy, Pi1.yy);
+        vec4 iz0 = Pi0.zzzz;
+        vec4 iz1 = Pi1.zzzz;
+      
+        vec4 ixy = permute(permute(ix) + iy);
+        vec4 ixy0 = permute(ixy + iz0);
+        vec4 ixy1 = permute(ixy + iz1);
+      
+        vec4 gx0 = ixy0 * (1.0 / 7.0);
+        vec4 gy0 = fract(floor(gx0) * (1.0 / 7.0)) - 0.5;
+        gx0 = fract(gx0);
+        vec4 gz0 = vec4(0.5) - abs(gx0) - abs(gy0);
+        vec4 sz0 = step(gz0, vec4(0.0));
+        gx0 -= sz0 * (step(0.0, gx0) - 0.5);
+        gy0 -= sz0 * (step(0.0, gy0) - 0.5);
+      
+        vec4 gx1 = ixy1 * (1.0 / 7.0);
+        vec4 gy1 = fract(floor(gx1) * (1.0 / 7.0)) - 0.5;
+        gx1 = fract(gx1);
+        vec4 gz1 = vec4(0.5) - abs(gx1) - abs(gy1);
+        vec4 sz1 = step(gz1, vec4(0.0));
+        gx1 -= sz1 * (step(0.0, gx1) - 0.5);
+        gy1 -= sz1 * (step(0.0, gy1) - 0.5);
+      
+        vec3 g000 = vec3(gx0.x,gy0.x,gz0.x);
+        vec3 g100 = vec3(gx0.y,gy0.y,gz0.y);
+        vec3 g010 = vec3(gx0.z,gy0.z,gz0.z);
+        vec3 g110 = vec3(gx0.w,gy0.w,gz0.w);
+        vec3 g001 = vec3(gx1.x,gy1.x,gz1.x);
+        vec3 g101 = vec3(gx1.y,gy1.y,gz1.y);
+        vec3 g011 = vec3(gx1.z,gy1.z,gz1.z);
+        vec3 g111 = vec3(gx1.w,gy1.w,gz1.w);
+      
+        vec4 norm0 = taylorInvSqrt(vec4(dot(g000, g000), dot(g010, g010), dot(g100, g100), dot(g110, g110)));
+        g000 *= norm0.x;
+        g010 *= norm0.y;
+        g100 *= norm0.z;
+        g110 *= norm0.w;
+        vec4 norm1 = taylorInvSqrt(vec4(dot(g001, g001), dot(g011, g011), dot(g101, g101), dot(g111, g111)));
+        g001 *= norm1.x;
+        g011 *= norm1.y;
+        g101 *= norm1.z;
+        g111 *= norm1.w;
+      
+        float n000 = dot(g000, Pf0);
+        float n100 = dot(g100, vec3(Pf1.x, Pf0.yz));
+        float n010 = dot(g010, vec3(Pf0.x, Pf1.y, Pf0.z));
+        float n110 = dot(g110, vec3(Pf1.xy, Pf0.z));
+        float n001 = dot(g001, vec3(Pf0.xy, Pf1.z));
+        float n101 = dot(g101, vec3(Pf1.x, Pf0.y, Pf1.z));
+        float n011 = dot(g011, vec3(Pf0.x, Pf1.yz));
+        float n111 = dot(g111, Pf1);
+      
+        vec3 fade_xyz = fade(Pf0);
+        vec4 n_z = mix(vec4(n000, n100, n010, n110), vec4(n001, n101, n011, n111), fade_xyz.z);
+        vec2 n_yz = mix(n_z.xy, n_z.zw, fade_xyz.y);
+        float n_xyz = mix(n_yz.x, n_yz.y, fade_xyz.x);
+        return 2.2 * n_xyz;
+      }
+      
+      // Include the Ashima code here!
+      
+      varying vec2 vUv;
+      float noise;
+      uniform float time;
+
+      uniform float day;
+      uniform float month;
+      uniform float year;
+      
+      float turbulence( vec3 p ) {
+        float w = 10.0;
+        float t = -.1;//.5
+        
+        for (float f = 1.0 ; f <= 1.0; f++ ){//1.0,10.0
+          float power = pow( day/82.0+1.0, f );
+          t += abs( pnoise( vec3( power * p ), vec3( 5,5,5 ) ) / power );
+        }
+        return t;
+      }
+      
+      void main() {
+        vUv = uv;
+                      ///speed           amount(.4)
+        noise = 1.0 * turbulence( year*(.6/125.0) * normal + time );//smoothing amounts(1st speed, )
+        float b = month/4.5 * pnoise( 0.05 * position + vec3( 1.0 * time ), vec3( 10.0 ) );//displacemet amount
+        float displacement = - 10. * noise + b;//100=noise
+      
+        vec3 newPosition = position + normal * displacement;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
+      
+      }
+    </script><!-- Scene 2 Vertex shader -->
+    <script type="x-shader/x-vertex" id="fragmentShader">
+      varying vec2 vUv;
+      varying float noise;
+
+      uniform float colorU;
+      uniform float gender;
+
+      void main() {
+        // compose the colour using the UV coordinate
+        // and modulate it with the noise like ambient occlusion
+        float val = gender;
+        vec3 color = vec3( vUv.x*val, 1.-vUv.y*val+.2 ,vUv.x*vUv.y+colorU );//vec3 color = vec3( vUv*.6+noise*1.1 , .8 ); vec3( vUv*.5 ,colorU )
+
+//color
+        gl_FragColor = vec4( color, 1. );
+      }
+    </script><!-- Scene 2 Fragment shader -->
+
+    <script src="js/globals.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/download.js"></script>
+    <script src="js/gradient.js"></script>
+    <script src="js/outro.js"></script>
+    <script src="js/checkbox.js"></script>
+    <script src="js/scene4.js"></script>
+    <script src="js/scene3.js"></script>
+    <script src="js/scene2.js"></script>
+    <script src="js/scene1.js"></script>
+    <script src="js/intro.js"></script>
+    <script src="js/setup.js"></script>
+
+  </body>
+</html>
