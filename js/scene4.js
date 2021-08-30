@@ -20,11 +20,9 @@ var idTally = 0;
 var AudioIndex4 = -1;
 var prevAudioIndex4 = -1;
 
-let composer;
 let godraysEffect;
 let effectPass;
 var glow;
-let directionalLight;
 
 var id1mod1 = 0;
 var id1mod2 = 0;
@@ -43,23 +41,20 @@ function init() {
     t.scale.setZ(.7);
     scene4.add(t);
 */
-    let areaImage = new Image();
-        areaImage.src = POSTPROCESSING.SMAAEffect.areaImageDataURL;
-    let searchImage = new Image();
-        searchImage.src = POSTPROCESSING.SMAAEffect.searchImageDataURL;
-    let smaaEffect = new POSTPROCESSING.SMAAEffect(searchImage,areaImage,1);
-    godraysEffect = new POSTPROCESSING.GodRaysEffect(camera, mesh, {
+    godraysEffect = new POSTPROCESSING.GodRaysEffect(camera, newSphere, {
         resolutionScale: 1,
         density: .65,
         decay: .63,
         weight: 0,
-        samples: 50
+        samples: 30,
+        blur: true
     }); //set1: 1,.8,.85,.7,50
-    let renderPass = new POSTPROCESSING.RenderPass(mesh, camera);
+    let renderPass = new POSTPROCESSING.RenderPass(newSphere, camera);
     effectPass = new POSTPROCESSING.EffectPass(camera,godraysEffect);
     effectPass.renderToScreen = true;
     composer = new POSTPROCESSING.EffectComposer(renderer);
     composer.addPass(renderPass);
+
     composer.addPass(effectPass);
 }
 
@@ -148,7 +143,7 @@ document.getElementById("id1").addEventListener("keyup", (event) => {
     document.getElementById("id1").classList.remove("fadeIn");
     document.getElementById("id1").classList.add("visible");
     keyHandler4(event);
-    event.target.value = event.target.value.replace(/[^a-zA-Z0-9- ]/g, "");
+    event.target.value = event.target.value.replace(/[^a-zA-Z0-9-/ ]/g, "");
     var id1key = event.key;
     id1key.replace(/[^a-zA-Z0-9- ]/g, "")
     if(id1key !== "Backspace"){
@@ -214,7 +209,7 @@ document.getElementById("id2").addEventListener("keyup", (event) => {
         /*var start = event.target.selectionStart;
         var end = event.target.selectionEnd;
         event.target.setSelectionRange(start, end);*/
-        event.target.value = event.target.value.replace(/[^a-zA-Z0-9 -]/g, "");
+        event.target.value = event.target.value.replace(/[^a-zA-Z0-9 -/]/g, "");
         var id2key = event.key;
         id2key.replace(/[^a-zA-Z0-9 -]/g, "")
         if(id2key !== "Backspace"){

@@ -3,6 +3,7 @@ var prevAudioIndex3 = -1;
 var scrolled = false;
 var navAlpha3 = 0;
 var g;
+var prevg;
 
 function updateScene3(){
     if(navIn3 && navAlpha3<1){
@@ -34,37 +35,57 @@ function updateScene3(){
         }
     }
     
-    var c = THREE.Math.lerp(material2.uniforms.colorU.value, .8-((gender*2/10)), 0.01);//0.01 = value smoothing
+    //var c = THREE.Math.lerp(material2.uniforms.colorU.value, .8-((gender*2/10)), 0.01);//0.01 = value smoothing
     //material2.uniforms.colorU.value = 1.;
     //material2.uniforms.gender.value = gender;
     if(gender >= 0){
         g = Math.round(gender)-1;
     }
 
-    if(g <0.5){
-        material2.uniforms.gender.value = THREE.Math.lerp(material2.uniforms.gender.value, 1., 0.05);
-        material2.uniforms.colorU.value = THREE.Math.lerp(material2.uniforms.colorU.value, 1.0, 0.05);
-    }
-    else if(g>= 0.5 && g < 1.5){
-        material2.uniforms.gender.value = THREE.Math.lerp(material2.uniforms.gender.value, 2.0, 0.05);
-        material2.uniforms.colorU.value = THREE.Math.lerp(material2.uniforms.colorU.value, 0.0, 0.05);
-    }
-    else if(g>=1.5 && g < 2.5){
-        material2.uniforms.gender.value = THREE.Math.lerp(material2.uniforms.gender.value, 1.0, 0.05);
-        material2.uniforms.colorU.value = THREE.Math.lerp(material2.uniforms.colorU.value, 0.0, 0.05);
-    }
-    else if(g>=2.5 && g < 3.5){
-        material2.uniforms.gender.value = THREE.Math.lerp(material2.uniforms.gender.value, 1., 0.05);
-        material2.uniforms.colorU.value = THREE.Math.lerp(material2.uniforms.colorU.value, 1.0, 0.05);
-    }
-    else if(g>=3.5 && g < 4.5){
+    /*if(prevg!==g){
+        if(g <0.5){//f
+            colsCurr.x= colsF.x;
+            colsCurr.y= colsF.y;
+            colsCurr.z= colsF.z;
+        }
+        else if(g>= 0.5 && g < 1.5){//m
+            colsCurr.x= colsM.x;
+            colsCurr.y= colsM.y;
+            colsCurr.z= colsM.z;
+        }
+        else if(g>=1.5 && g < 2.5){//o
+            colsCurr.x= colsO.x;
+            colsCurr.y= colsO.y;
+            colsCurr.z= colsO.z;
+        }
+        cols = [{
+            stop: 0,
+            color: new THREE.Color(colsCurr.x)
+        }, {
+            stop: .15,
+            color: new THREE.Color(colsCurr.y)
+        }, {
+            stop: .25,
+            color: new THREE.Color(colsCurr.z)
+        }, {
+            stop: .75,
+            color: new THREE.Color(colsCurr.y)
+        }, {
+            stop: 1,
+            color: new THREE.Color(colsCurr.x)
+        }];
+        setGradient(sphere_geometry, cols, 'z', rev);
+        prevg = g;
+    }*/
+    
+    /*else if(g>=3.5 && g < 4.5){
         material2.uniforms.gender.value = THREE.Math.lerp(material2.uniforms.gender.value, 2.0, 0.05);
         material2.uniforms.colorU.value = THREE.Math.lerp(material2.uniforms.colorU.value, 0.0, 0.05);
     }
     else if(g>=4.5 ){
         material2.uniforms.gender.value = THREE.Math.lerp(material2.uniforms.gender.value, 1.0, 0.05);
         material2.uniforms.colorU.value = THREE.Math.lerp(material2.uniforms.colorU.value, 0.0, 0.05);
-    }
+    }*/
 };
 
 document.getElementById("gender").addEventListener("scroll", function(){
@@ -82,6 +103,10 @@ document.getElementById("gender").addEventListener("scroll", function(){
     scrolled = true;
     gender = document.getElementById("gender").scrollTop/100;
     console.log(gender);
+
+
+    //female>male>other
+
     if(gender>3){
         gender = 3;
     }

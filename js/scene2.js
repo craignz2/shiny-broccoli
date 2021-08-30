@@ -10,6 +10,18 @@ var navAlpha2 = 0;
 scene2 = new THREE.Group();
 scene2.position.z = -5;
 
+point = new THREE.PointLight( 0xffffff, 5 );
+point.position.set(0,0,50);
+//scene2.add(point);
+
+var sphere_geometry = new THREE.SphereGeometry(1, 128, 128);
+sphere_geometry.colorsNeedUpdate = true;
+
+
+const directionalLight2 = new THREE.AmbientLight( 0xffffff, 1 );
+scene2.add( directionalLight2 );
+
+
 function fillYearForm() {
     var ul = document.getElementById("years");
     var currYear = date.getFullYear();
@@ -137,7 +149,7 @@ function removeDays(ul, length, target){//done
 
 }
 
-material2 = new THREE.ShaderMaterial({
+/*material2 = new THREE.ShaderMaterial({
     uniforms: {
       time: {
         type: "f",
@@ -159,34 +171,103 @@ material2 = new THREE.ShaderMaterial({
         value: 1
       }	
     },
-    vertexShader: document.getElementById( 'vertexShader' ).textContent,
-    fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+    //vertexShader: document.getElementById( 'vertexShader' ).textContent,
+    //fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
     transparent: true,
+});*/
+
+const loader = new THREE.CubeTextureLoader();
+loader.setPath( '/images/cube/' );
+
+const textureCube = loader.load( [
+	'px.png', 'nx.png',
+	'py.png', 'ny.png',
+	'pz.png', 'nz.png'
+]  /*['StandardCubeMap.png']*/);
+loader.mapping = THREE.CubeRefractionMapping;
+
+
+
+material3 = new THREE.MeshPhysicalMaterial({
+    envMap: textureCube,
+    //refractionRatio: 5
 });
 
-mesh = new THREE.Mesh(
+material3.roughness = 0.; 
+material3.metalness = 1.;
+material3.transparent = true;
+material3.opacity = .75;
+material3.premultipliedAlpha = true;
+material3.envMapIntensity = 5;
+material3.side = THREE.BackSide;
+material3.vertexColors = THREE.VertexColors;
+
+material4 = new THREE.MeshPhysicalMaterial({
+    envMap: textureCube,
+    //refractionRatio: 5
+});
+
+material4.roughness = 0.; 
+material4.metalness = 1.;
+material4.transparent = true;
+material4.opacity = .5;
+material4.premultipliedAlpha = true;
+material4.envMapIntensity = 10;
+material4.side = THREE.FrontSide;
+material4.vertexColors = THREE.VertexColors;
+
+/*mesh = new THREE.Mesh(
     new THREE.IcosahedronGeometry( 20, 100 ),
     material2
-);
+);*/
 
-scene2.add(mesh);
-mesh.position.z = -50;
+//scene2.add(mesh);
+
+newSphere = new THREE.Mesh(sphere_geometry, material3);
+newSphere2 = new THREE.Mesh(sphere_geometry, material4);
+setGradient(sphere_geometry, cols, 'z', rev);
+sphere_geometry.colorsNeedUpdate = true;
+scene2.add(newSphere2);
+scene2.add(newSphere);
+
+scene2.layers.set(0);
+newSphere.layers.set(0);
+
+newSphere.scale.x = 0;
+newSphere.scale.y = 0;
+newSphere.scale.z = 0;
+
+newSphere2.scale.x = 0;
+newSphere2.scale.y = 0;
+newSphere2.scale.z = 0;
+
+
+/*mesh.position.z = -50;
 mesh.rotation.y = 0.5;
 mesh.scale.x = 0;
 mesh.scale.y = 0;
 mesh.scale.z = 0;
+*/
+
+var speed = 0.0002;
 
 function updateScene2(){
     if(orbScaleIn === true){
-        if(mesh.scale.x === 0){
-            mesh.scale.x = 0.02;
-            mesh.scale.y = 0.02;
-            mesh.scale.z = 0.02;
+        if(newSphere.scale.x === 0){
+            newSphere.scale.x = 0.02;
+            newSphere.scale.y = 0.02;
+            newSphere.scale.z = 0.02;
+            newSphere2.scale.x = 0.02;
+            newSphere2.scale.y = 0.02;
+            newSphere2.scale.z = 0.02;
         }
-        else if(mesh.scale.x < 1){
-            mesh.scale.x +=((1-mesh.scale.x)*.1);
-            mesh.scale.y +=((1-mesh.scale.y)*.1);
-            mesh.scale.z +=((1-mesh.scale.z)*.1);
+        else if(newSphere.scale.x < 5){
+            newSphere.scale.x +=((5-newSphere.scale.x)*.02);
+            newSphere.scale.y +=((5-newSphere.scale.y)*.02);
+            newSphere.scale.z +=((5-newSphere.scale.z)*.02);
+            newSphere2.scale.x +=((5-newSphere2.scale.x)*.02);
+            newSphere2.scale.y +=((5-newSphere2.scale.y)*.02);
+            newSphere2.scale.z +=((5-newSphere2.scale.z)*.02);
         }
     }
 
@@ -212,7 +293,7 @@ function updateScene2(){
         }
     }
 
-    material2.uniforms[ 'time' ].value = .00025 * ( Date.now() - date );
+    /*material2.uniforms[ 'time' ].value = .00025 * ( Date.now() - date );
 
     var d = THREE.Math.lerp(material2.uniforms.day.value, day, 0.001);//0.01 = value smoothing
     material2.uniforms.day.value = d/2;
@@ -221,9 +302,38 @@ function updateScene2(){
     material2.uniforms.month.value = m;//none
 
     var y = THREE.Math.lerp(material2.uniforms.year.value, year, 0.01);//0.01 = value smoothing
-    material2.uniforms.year.value = y;
+    material2.uniforms.year.value = y;*/
 
 
+    var k = .5;
+    var d2 = THREE.Math.lerp(k, (day*100/52)+.5, 0.01);
+    k = d2;
+
+
+    var x = (month/48000)+.0002;
+
+    //var m2 = THREE.Math.lerp(speed, x, 0.00001);
+    var m2 = THREE.Math.lerp(speed, x, 0.001);
+    speed = m2;
+    var time = performance.now() * m2;
+
+    var y = 1-(year/180);
+    
+    for (var i = 0; i < newSphere.geometry.vertices.length; i++) {
+        var p = newSphere.geometry.vertices[i];
+        p.normalize().multiplyScalar(1 + y * noise.perlin3(p.x * d2 + time, p.y * d2, p.z * d2));
+    }
+    newSphere.geometry.computeVertexNormals();
+    newSphere.geometry.normalsNeedUpdate = true;
+    newSphere.geometry.verticesNeedUpdate = true;
+
+    for (var i = 0; i < newSphere2.geometry.vertices.length; i++) {
+        var p = newSphere2.geometry.vertices[i];
+        p.normalize().multiplyScalar(1 + y * noise.perlin3(p.x * d2 + time, p.y * d2, p.z * d2));
+    }
+    newSphere2.geometry.computeVertexNormals();
+    newSphere2.geometry.normalsNeedUpdate = true;
+    newSphere2.geometry.verticesNeedUpdate = true;
 };
 
 firstScroll = false;
@@ -262,19 +372,16 @@ var firstKey = true;
 
 document.getElementById("days").addEventListener("scroll", function(){
     day = document.getElementById("days").scrollTop/100+1;
-    console.log(day);
     setTally();
 });
 document.getElementById("months").addEventListener("scroll", function(){
     var d = document.getElementById("months").scrollTop/100+1;
-    console.log(d);
     switchDays(d);
     month = d;
     setTally();
 });
 document.getElementById("years").addEventListener("scroll", function(){
     year = document.getElementById("years").scrollTop/100;
-    console.log(year);
     age = year;
     setTally();
 });

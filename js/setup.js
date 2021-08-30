@@ -1,13 +1,16 @@
 scene = new THREE.Scene();
-camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 100 );
+camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, .1, 1000);
 renderer = new THREE.WebGLRenderer({alpha:true});
+renderer.shadowMap.enabled = true;
+
+renderer.outputEncoding = THREE.sRGBEncoding;
 
 var sceneIndex = 0;
 var transition = false;
 var sceneAlpha = 1;
 var idType;
 
-camera.add(listener);
+//camera.add(listener);
 camera.position.z = 10;
 
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -20,6 +23,7 @@ onWindowResize();
 window.addEventListener('resize', onWindowResize);
 
 render();
+
 
 //scene.add(intro);
 
@@ -57,31 +61,43 @@ function render() {
             updateGradient();
             break;
         case 3:
+           
+            if(point.intensity < .5){
+                point.intensity += .02
+            }
+            if(material3.roughness > 0.05){
+                material3.roughness -= .02; 
+            }
+            if(material3.metalness < 0.95){
+                material3.metalness += .02; 
+            }
+            if(material4.roughness > 0.05){
+                material4.roughness -= .02; 
+            }
+            if(material4.metalness < 0.95){
+                material4.metalness += .02; 
+            }
             updateScene2(render);
             updateScene3(render);
             updateGradient();
             break;
             case 4:
                 updateScene2(render);
-                updateScene3(render);
                 updateScene4(render);
                 updateGradient();
                 break;
                 case 5:
                     updateScene2(render);
-                    updateScene3(render);
                     updateScene4(render);
                     updateGradient();
                     break;
                     case 6:
                         updateScene2(render);
-                        updateScene3(render);
                         updateScene4(render);
                         updateGradient();
                         break;
                         case 7:
                             updateScene2(render);
-                            updateScene3(render);
                             updateScene4(render);
                             updateGradient();
                             break;
@@ -293,7 +309,7 @@ form3.addEventListener("submit", function(event) {
                 console.log("JA PASSPORT +++++++++++++++++++++++++++++++++++++++++++++++++")
                 document.getElementById("enterid").innerHTML = "PASSPORT NUMBER";
                 document.getElementById("form4submit").value = "PASSPORT EXPIRY DATE";
-                document.getElementById("id2").placeholder = "2000-01-01";
+                document.getElementById("id2").placeholder = "dd/mm/yyyy";
             }
 
             setTimeout(function() {
@@ -441,9 +457,6 @@ document.getElementById("checkboxSubmit").addEventListener("click", function(eve
     console.log(sceneIndex);
     if(sceneIndex === 5 && checkboxTicked === true){
 
-        document.getElementById("checkboxform").classList.remove("visible");
-        document.getElementById("checkboxform").classList.remove("fadeIn");
-        document.getElementById("checkboxform").classList.add("fadeOut");
 
         /*document.getElementById("indexText4").classList.remove("fadeInText");
         document.getElementById("indexText3").classList.add("fadeOutText");
@@ -470,10 +483,10 @@ document.getElementById("checkboxSubmit").addEventListener("click", function(eve
             redirect: 'follow'
             };
 
-            fetch("https://age-verification-api.vercel.app/", requestOptions)
+            fetch("https://age-verification-api.vercel.app/api/verifyId", requestOptions)
             .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
+            .then(result => catchResult(result))
+            .catch(error => catchFalse(error));
         }
         else if(idType === "driver_licence"){
             var formdata = new FormData();
@@ -492,19 +505,17 @@ document.getElementById("checkboxSubmit").addEventListener("click", function(eve
             redirect: 'follow'
             };
 
-            fetch("https://age-verification-api.vercel.app/", requestOptions)
+            fetch("https://age-verification-api.vercel.app/api/verifyId", requestOptions)
             .then(response => /*response.text()*/console.log(response.text()))
-            .then(result => console.log(result))
-            .catch(error => console.log('error', error));
+            .then(result => catchResult(result))
+            .catch(error =>  catchError(error));
         }
 
-        
-        if(response === error){
-            document.getElementById("outro1").children[0].innerHTML = "VERIFICATION FAILED";
-            document.getElementById("outro1").children[1].innerHTML = "PLEASE MAKE SURE ALL DETAILS ENTERED ARE CORRECT";
-            document.getElementById("continueOutro1").value = "UPDATE YOUR DETAILS";
-        }
-        else{
+        function catchResult(result){
+            console.log(result)
+            document.getElementById("checkboxform").classList.remove("visible");
+            document.getElementById("checkboxform").classList.remove("fadeIn");
+            document.getElementById("checkboxform").classList.add("fadeOut");
             setTimeout(function() {
                 document.getElementById("checkboxform").classList.add("invisible");
                 outro1.classList.remove("invisible");
@@ -514,6 +525,39 @@ document.getElementById("checkboxSubmit").addEventListener("click", function(eve
             },1000);
             sceneIndex++;
         }
+        function catchError(result){
+            console.log('error', error)
+            document.getElementById("outro1").children[0].innerHTML = "VERIFICATION FAILED";
+            document.getElementById("outro1").children[1].innerHTML = "PLEASE MAKE SURE ALL DETAILS ENTERED ARE CORRECT";
+            document.getElementById("continueOutro1").value = "UPDATE YOUR DETAILS";
+            setTimeout(function() {
+                document.getElementById("checkboxform").classList.add("invisible");
+                outro1.classList.remove("invisible");
+                outro1.classList.remove("fadeOut");
+                outro1.classList.add("visible");
+                outro1.classList.add("fadeIn");
+            },1000);
+        }
+        
+
+        
+       /* if(response === error){
+            console.log('error', error)
+            document.getElementById("outro1").children[0].innerHTML = "VERIFICATION FAILED";
+            document.getElementById("outro1").children[1].innerHTML = "PLEASE MAKE SURE ALL DETAILS ENTERED ARE CORRECT";
+            document.getElementById("continueOutro1").value = "UPDATE YOUR DETAILS";
+        }
+        else{
+            console.log(result)
+            setTimeout(function() {
+                document.getElementById("checkboxform").classList.add("invisible");
+                outro1.classList.remove("invisible");
+                outro1.classList.remove("fadeOut");
+                outro1.classList.add("visible");
+                outro1.classList.add("fadeIn");
+            },1000);
+            sceneIndex++;
+        }*/
         
     }
 });

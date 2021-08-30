@@ -20,12 +20,12 @@
         <span class="indexBar" id="indexBar4"><p class="indexText" id="indexText4">MELODY</p></span>
       </div>
 
-      <a id="exit" href="https://vuse.co.nz/" class="hint">NO THANKS, I'LL JUST FILL OUT THE REGULAR FORM.</a>
+      <a id="exit" href="https://vuse.co.nz/" class="hint">NO THANKS, I'LL JUST FILL OUT THE REGULAR FORM</a>
       <span id="hint1" class="hint invisible">SOUND ON<span id="soundimg"></span></span>
     <div class="scene" id="intro">
             <div class="intro" id="intro1">
         <p class="t1">VERIFY YOUR AGE</p>
-        <p class="t2">AND MIX YOUR OWN MUSIC TRACK.</p>
+        <p class="t2">AND MIX YOUR OWN MUSIC TRACK</p>
         <div id="loadDiv">
           <div class="Sound" id="loadanim">
             <span></span>
@@ -131,8 +131,8 @@
           <li class="snapChild">&nbsp;</li> 
           <li class="snapChild">&nbsp;</li> 
           <li id="choose" class="snapChild choosecol">Choose</li>
-          <li class="snapChild">Male</li>
           <li class="snapChild">Female</li>
+          <li class="snapChild">Male</li>
           <li class="snapChild">Other</li>
           <span class="test"></span>
           <span class="test"></span>
@@ -163,7 +163,7 @@
         <!--<label for="fname" style="display:block;width:100%;text-align: center;">ENTER YOUR NAME</label> -->
         <input id="CheckBox" class="check" type="checkbox" name="checkbox" />
         <div id="checkText">
-          I confirm that I am authorised to provide the personal details presented and I consent to my information being checked with the document issuer or official recorder holder via third party systems for the purpose of confirming my identity.</div>
+          I confirm that I am authorised to provide the personal details presented and I consent to my information being checked with the document issuer or official record holder via third party systems for the purpose of confirming my identity.</div>
         <input class="button_blur" type="submit" id="checkboxSubmit" value="NEXT">
       </form>
 
@@ -199,7 +199,10 @@
     <script src="js/three.js"></script>
     <script src="js/postprocessing.min.js"></script>
     <script src="js/BufferGeometryUtils.js"></script>
-    <script type="x-shader/x-vertex" id="vertexShader">
+    <script src="js/RGBELoader.js"></script>
+    <script src='https://fariskassim.com/stage/rebel9/teaf/blob/v4/js/perlin.js'></script>
+
+    <!--<script type="x-shader/x-vertex" id="vertexShader">
       //
       // GLSL textureless classic 3D noise "cnoise",
       // with an RSL-style periodic variant "pnoise".
@@ -410,7 +413,7 @@
         gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
       
       }
-    </script><!-- Scene 2 Vertex shader -->
+    </script>
     <script type="x-shader/x-vertex" id="fragmentShader">
       varying vec2 vUv;
       varying float noise;
@@ -427,7 +430,7 @@
 //color
         gl_FragColor = vec4( color, 1. );
       }
-    </script><!-- Scene 2 Fragment shader -->
+    </script>-->
 
     <script src="js/globals.js"></script>
     <script src="js/audio.js"></script>
