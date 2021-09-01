@@ -31,8 +31,8 @@ var id1mod3 = 13;
 function init() {
     /*let directionalLight = new THREE.DirectionalLight(0xffccaa,3);
     directionalLight.position.set(0,0,-1);
-    scene4.add(directionalLight);*/
-
+    scene2.add(directionalLight);*/
+    //scene2.add(newSphere);
     /*var t = mesh.clone();
     t.position.z = - 51;
 
@@ -41,20 +41,22 @@ function init() {
     t.scale.setZ(.7);
     scene4.add(t);
 */
-    godraysEffect = new POSTPROCESSING.GodRaysEffect(camera, newSphere, {
+    godraysEffect = new POSTPROCESSING.GodRaysEffect(camera, newSphere2, {
         resolutionScale: 1,
-        density: .65,
-        decay: .63,
+        density: 0,
+        decay: 0,
         weight: 0,
-        samples: 30,
+        samples: 100,
         blur: true
     }); //set1: 1,.8,.85,.7,50
-    let renderPass = new POSTPROCESSING.RenderPass(newSphere, camera);
+    let renderPass = new POSTPROCESSING.RenderPass(scene, camera);
+
     effectPass = new POSTPROCESSING.EffectPass(camera,godraysEffect);
     effectPass.renderToScreen = true;
-    composer = new POSTPROCESSING.EffectComposer(renderer);
-    composer.addPass(renderPass);
 
+    composer = new POSTPROCESSING.EffectComposer(renderer);
+
+    composer.addPass(renderPass);
     composer.addPass(effectPass);
 }
 
@@ -67,6 +69,7 @@ function updateScene4(){
         document.getElementById("indexText4").setAttribute("style", "color: rgba(  255,255,255,"+navAlpha4+")");
         document.getElementById("indexBar4").setAttribute("style", "box-shadow: 0px 0px 10px 10px rgba(255,255,255,"+navAlpha4/2+"); background-color: rgba(255,255,255,"+navAlpha4+");");
     }
+    
     //console.log(AudioIndex4);
     for(var t = 0; t < musicFiles[genre][3].length; t++){
         if(AudioIndex4 > -1 && sounds[genre][3][AudioIndex4].getVolume() < 1){
@@ -93,7 +96,6 @@ function updateScene4(){
     var t = composer.passes[1].effects[0].godRaysMaterial.uniforms.decay.value;
     var tval = THREE.Math.lerp(t, .73+(id1mod3/200), 0.1);
     composer.passes[1].effects[0].godRaysMaterial.uniforms.decay = {value: tval};
-    composer.render();
     //composer.passes[1].effects[0].godRaysMaterial.defines.SAMPLES_FLOAT = AudioIndex4;
 };
 
@@ -143,59 +145,65 @@ document.getElementById("id1").addEventListener("keyup", (event) => {
     document.getElementById("id1").classList.remove("fadeIn");
     document.getElementById("id1").classList.add("visible");
     keyHandler4(event);
-    event.target.value = event.target.value.replace(/[^a-zA-Z0-9-/ ]/g, "");
-    var id1key = event.key;
-    id1key.replace(/[^a-zA-Z0-9- ]/g, "")
-    if(id1key !== "Backspace"){
+
+    if(event.target.value.length<8){
+        event.target.value = event.target.value.replace(/[^a-zA-Z0-9-/ ]/g, "");
+        var id1key = event.key;
+        id1key.replace(/[^a-zA-Z0-9- ]/g, "")
+        if(id1key !== "Backspace"){
+            id1 = event.target.value;
+        }
+        else{
+            id1 = id1.slice(0, -1);
+        }
         id1 = event.target.value;
+
+        if(id1.length<3){
+            //id1mod1+=id1[id1.length-1].charCodeAt(0) - 96;
+            var temp1 = 0;
+            for(var i = 0; i < id1.length; i++){
+                if(i<2){
+                    temp1+=id1[i].charCodeAt(0) - 96;
+                }
+            }
+            id1mod1 = temp1;
+            if(id1mod1>52){
+                id1mod1 = 52;
+            }
+        }
+
+        if(id1.length>2 && id1.length<9){
+            //id1mod1+=id1[id1.length-1].charCodeAt(0) - 96;
+            var temp2 = 0;
+            var t2 = id1.substring(2);
+            for(var i = 0; i < t2.length; i++){
+                if(i<6){
+                    temp2+=t2[i].charCodeAt(0) - 48;
+                }
+            }
+            id1mod2 = temp2;
+            if(id1mod2>54){
+                id1mod2 = 54;
+            }
+        }
+        else{id1mod2=0;}
+        //console.log(id1[id1.length-1].charCodeAt(0) - 96);
+
+        if(firstKey4 === true){
+            firstKey4 = false;
+        }
+        if(id1.length > 7 && submitEnabledid1 === false){
+            document.getElementById("form4submit").classList.remove("invisible");
+            document.getElementById("form4submit").classList.remove("fadeOut");
+            document.getElementById("form4submit").classList.add("fadeIn");
+            setTimeout(function() {
+                document.getElementById("form4submit").classList.add("visible");
+            },1000);
+            submitEnabledid1 = true;
+        }
     }
     else{
-        id1 = id1.slice(0, -1);
-    }
-    id1 = event.target.value;
-
-    if(id1.length<3){
-        //id1mod1+=id1[id1.length-1].charCodeAt(0) - 96;
-        var temp1 = 0;
-        for(var i = 0; i < id1.length; i++){
-            if(i<2){
-                temp1+=id1[i].charCodeAt(0) - 96;
-            }
-        }
-        id1mod1 = temp1;
-        if(id1mod1>52){
-            id1mod1 = 52;
-        }
-    }
-
-    if(id1.length>2 && id1.length<9){
-        //id1mod1+=id1[id1.length-1].charCodeAt(0) - 96;
-        var temp2 = 0;
-        var t2 = id1.substring(2);
-        for(var i = 0; i < t2.length; i++){
-            if(i<6){
-                temp2+=t2[i].charCodeAt(0) - 48;
-            }
-        }
-        id1mod2 = temp2;
-        if(id1mod2>54){
-            id1mod2 = 54;
-        }
-    }
-    else{id1mod2=0;}
-    //console.log(id1[id1.length-1].charCodeAt(0) - 96);
-
-    if(firstKey4 === true){
-        firstKey4 = false;
-    }
-    if(id1.length > 7 && submitEnabledid1 === false){
-        document.getElementById("form4submit").classList.remove("invisible");
-        document.getElementById("form4submit").classList.remove("fadeOut");
-        document.getElementById("form4submit").classList.add("fadeIn");
-        setTimeout(function() {
-            document.getElementById("form4submit").classList.add("visible");
-        },1000);
-        submitEnabledid1 = true;
+        event.target.value = id1;
     }
 });
 
@@ -209,44 +217,49 @@ document.getElementById("id2").addEventListener("keyup", (event) => {
         /*var start = event.target.selectionStart;
         var end = event.target.selectionEnd;
         event.target.setSelectionRange(start, end);*/
-        event.target.value = event.target.value.replace(/[^a-zA-Z0-9 -/]/g, "");
-        var id2key = event.key;
-        id2key.replace(/[^a-zA-Z0-9 -]/g, "")
-        if(id2key !== "Backspace"){
+        if(event.target.value.length<3){
+            event.target.value = event.target.value.replace(/[^a-zA-Z0-9 -/]/g, "");
+            var id2key = event.key;
+            id2key.replace(/[^a-zA-Z0-9 -]/g, "")
+            if(id2key !== "Backspace"){
+                id2 = event.target.value;
+            }
+            else{
+                id2 = id2.slice(0, -1);
+            }
             id2 = event.target.value;
-        }
-        else{
-            id2 = id2.slice(0, -1);
-        }
-        id2 = event.target.value;
 
-        if(id2.length<4){
-            //id1mod1+=id1[id1.length-1].charCodeAt(0) - 96;
-            var temp3 = 0;
-            for(var i = 0; i < id2.length; i++){
-                if(i<4){
-                    temp3+=id2[i].charCodeAt(0) - 48;
+            if(id2.length<4){
+                //id1mod1+=id1[id1.length-1].charCodeAt(0) - 96;
+                var temp3 = 0;
+                for(var i = 0; i < id2.length; i++){
+                    if(i<4){
+                        temp3+=id2[i].charCodeAt(0) - 48;
+                    }
+                }
+                id1mod3 = temp3;
+                if(id1mod3>27){
+                    id1mod3 = 27;
                 }
             }
-            id1mod3 = temp3;
-            if(id1mod3>27){
-                id1mod3 = 27;
+
+            if(firstKey4 === true){
+                firstKey4 = false;
+            }
+            if(id2.length > 2 && submitEnabledid2 === false){
+                document.getElementById("form4submit").classList.remove("fadeOut");
+                document.getElementById("form4submit").classList.remove("invisible");
+                document.getElementById("form4submit").classList.add("fadeIn");
+                document.getElementById("form4submit").classList.add("fadeIn");
+                setTimeout(function() {
+                    document.getElementById("form4submit").classList.add("visible");
+                },1000);
+                submitEnabledid2 = true;
             }
         }
-
-        if(firstKey4 === true){
-            firstKey4 = false;
-        }
-        if(id2.length > 2 && submitEnabledid2 === false){
-            document.getElementById("form4submit").classList.remove("fadeOut");
-            document.getElementById("form4submit").classList.remove("invisible");
-            document.getElementById("form4submit").classList.add("fadeIn");
-            document.getElementById("form4submit").classList.add("fadeIn");
-            setTimeout(function() {
-                document.getElementById("form4submit").classList.add("visible");
-            },1000);
-            submitEnabledid2 = true;
-        }
+    }
+    else{
+        event.target.value = id2;
     }
 });
 

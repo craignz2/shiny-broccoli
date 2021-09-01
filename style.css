@@ -36,6 +36,61 @@ p{
     top:0;
 }*/
 
+#blurPlane{
+    width:100%;
+    height:100%;
+    z-index:10000;
+    display: block;
+    background-color: rgba(0,0,0,0);
+}
+
+.blur{
+    -webkit-animation-fill-mode: forwards;
+       -moz-animation-fill-mode: forwards;
+       -ms-aanimation-fill-mode: forwards;
+         -o-animation-fill-mode: forwards;
+            animation-fill-mode: forwards;
+              -webkit-animation: blur 1s; /* Safari, Chrome and Opera > 12.1 */
+                 -moz-animation: blur 1s; /* Firefox < 16 */
+                  -ms-animation: blur 1s; /* Internet Explorer */
+                   -o-animation: blur 1s; /* Opera < 12.1 */
+                      animation: blur 1s;
+}
+
+@keyframes blur {
+    0% {  backdrop-filter: blur(0px);}
+    50% {  backdrop-filter: blur(20px);}
+    100% { backdrop-filter: blur(0px);}
+}
+
+/* Firefox < 16 */
+@-moz-keyframes blur {
+    0% {  backdrop-filter: blur(0px);}
+    50% {  backdrop-filter: blur(20px);}
+    100% { backdrop-filter: blur(0px);}
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes blur {
+    0% {  backdrop-filter: blur(0px);}
+    50% {  backdrop-filter: blur(20px);}
+    100% { backdrop-filter: blur(0px);}
+}
+
+/* Internet Explorer */
+@-ms-keyframes blur {
+    0% {  backdrop-filter: blur(0px);}
+    50% {  backdrop-filter: blur(20px);}
+    100% { backdrop-filter: blur(0px);}
+}
+
+/* Opera < 12.1 */
+@-o-keyframes blur {
+    0% {  backdrop-filter: blur(0px);}
+    50% {  backdrop-filter: blur(20px);}
+    100% { backdrop-filter: blur(0px);}
+}
+
 .t1{
     font-family: 'TrimPoster-Hefty';
     font-size: 28px;

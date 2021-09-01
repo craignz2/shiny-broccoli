@@ -1,7 +1,6 @@
 scene = new THREE.Scene();
-camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, .1, 1000);
+camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, .1, 100000);
 renderer = new THREE.WebGLRenderer({alpha:true});
-renderer.shadowMap.enabled = true;
 
 renderer.outputEncoding = THREE.sRGBEncoding;
 
@@ -14,6 +13,7 @@ var idType;
 camera.position.z = 10;
 
 renderer.setSize(window.innerWidth, window.innerHeight);
+document.getElementById("blurPlane").setAttribute("style", "width: "+ window.innerWidth +"px; height: "+ window.innerHeight+"px;");
 renderer.setClearColor(0x000000, 1);
 document.body.insertBefore(renderer.domElement, document.getElementById("intro"));
 renderer.domElement.id = "canvas";
@@ -22,7 +22,7 @@ renderer.domElement.setAttribute("style", "filter: blur(1px);");
 onWindowResize();
 window.addEventListener('resize', onWindowResize);
 
-render();
+renderScene();
 
 
 //scene.add(intro);
@@ -44,20 +44,20 @@ function getParameterByName(name, url = window.location.href) {
     return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
-function render() {
+function renderScene() {
     switch(sceneIndex){
         case 0:
             if(loaded === true){
                 scene.remove(scene.children[0]);
                 scene.add(intro);
-                updateIntro(render);
+                updateIntro(renderScene);
             }
             break;
         case 1:
-            updateScene1(render);
+            updateScene1(renderScene);
             break;
         case 2:
-            updateScene2(render);
+            updateScene2(renderScene);
             updateGradient();
             break;
         case 3:
@@ -65,40 +65,46 @@ function render() {
             if(point.intensity < .5){
                 point.intensity += .02
             }
-            if(material3.roughness > 0.05){
+            /*if(material3.roughness > 0.05){
                 material3.roughness -= .02; 
             }
-            if(material3.metalness < 0.95){
+            if(material3.metalness < 1){
                 material3.metalness += .02; 
-            }
+            }*/
             if(material4.roughness > 0.05){
                 material4.roughness -= .02; 
             }
-            if(material4.metalness < 0.95){
+            if(material4.metalness < 1){
                 material4.metalness += .02; 
+            }/*
+            if(material3.envMapIntensity < 5){
+                material3.envMapIntensity += .1; 
+            }*/
+            if(material4.envMapIntensity < 10){
+                material4.envMapIntensity += .2; 
             }
-            updateScene2(render);
-            updateScene3(render);
+            updateScene2(renderScene);
+            updateScene3(renderScene);
             updateGradient();
             break;
             case 4:
-                updateScene2(render);
-                updateScene4(render);
+                updateScene2(renderScene);
+                updateScene4(renderScene);
                 updateGradient();
                 break;
                 case 5:
-                    updateScene2(render);
-                    updateScene4(render);
+                    updateScene2(renderScene);
+                    updateScene4(renderScene);
                     updateGradient();
                     break;
                     case 6:
-                        updateScene2(render);
-                        updateScene4(render);
+                        updateScene2(renderScene);
+                        updateScene4(renderScene);
                         updateGradient();
                         break;
                         case 7:
-                            updateScene2(render);
-                            updateScene4(render);
+                            updateScene2(renderScene);
+                            updateScene4(renderScene);
                             updateGradient();
                             break;
     }
@@ -107,8 +113,14 @@ function render() {
         sceneAlpha-=0.01;
         renderer.setClearColor(0x000000, sceneAlpha);
     }
-    renderer.render( scene, camera );
-    requestAnimationFrame(render);
+    if(sceneIndex<4){
+        renderer.render( scene, camera );
+        requestAnimationFrame(renderScene);
+    }
+    else{
+        composer.render(0.1);
+        requestAnimationFrame(renderScene);
+    }
 }
 
 if(window.innerWidth > window.innerHeight){
@@ -196,6 +208,7 @@ document.getElementById("form1submit").addEventListener("click", function(event)
             orbScaleIn = true;
             scene.remove(scene1);
             scene.add(scene2);
+            scene.add(scene2b);
 
             form1.classList.remove("visible");
             form1.classList.remove("fadeIn");
@@ -207,7 +220,10 @@ document.getElementById("form1submit").addEventListener("click", function(event)
             document.getElementById("indexText2").classList.remove("invisibleText");
             document.getElementById("indexText2").classList.add("fadeInText");
 
+
+            document.getElementById("blurPlane").classList.add("blur");
             setTimeout(function() {
+                document.getElementById("blurPlane").classList.remove("blur");
                 form2.classList.remove("invisible");
                 form2.classList.remove("fadeOut");
                 form2.classList.add("visible");
@@ -262,7 +278,9 @@ form2.addEventListener("submit", function(event) {
                 document.getElementById("indexText3").classList.remove("invisibleText");
                 document.getElementById("indexText3").classList.add("fadeInText");
         
+                document.getElementById("blurPlane").classList.add("blur");
                 setTimeout(function() {
+                    document.getElementById("blurPlane").classList.remove("blur");
                     form2.classList.add("invisible");
                     form3.classList.remove("invisible");
                     form3.classList.remove("fadeOut");
@@ -294,6 +312,8 @@ form3.addEventListener("submit", function(event) {
             navIn4 = true;
             init();
             //scene.add(scene4);
+            form2.classList.remove("visible");
+            form2.classList.add("invisible");
             form3.classList.remove("visible");
             form3.classList.remove("fadeIn");
             form3.classList.add("fadeOut");
@@ -306,13 +326,14 @@ form3.addEventListener("submit", function(event) {
             idType = getParameterByName('id_type');
             console.log(idType);
             if(idType === "passport"){
-                console.log("JA PASSPORT +++++++++++++++++++++++++++++++++++++++++++++++++")
                 document.getElementById("enterid").innerHTML = "PASSPORT NUMBER";
                 document.getElementById("form4submit").value = "PASSPORT EXPIRY DATE";
                 document.getElementById("id2").placeholder = "dd/mm/yyyy";
             }
 
+            document.getElementById("blurPlane").classList.add("blur");
             setTimeout(function() {
+                document.getElementById("blurPlane").classList.remove("blur");
                 form3.classList.add("invisible");
                 form4.classList.remove("invisible");
                 form4.classList.remove("fadeOut");
@@ -402,7 +423,9 @@ document.getElementById("form4submit").addEventListener("click", function(event)
 
                     document.getElementById("nav").classList.add("fadeOut");
 
+                    document.getElementById("blurPlane").classList.add("blur");
                     setTimeout(function() {
+                        document.getElementById("blurPlane").classList.remove("blur");
                         document.getElementById("nav").classList.add("invisible");
                         form4.classList.add("invisible");
                         document.getElementById("checkboxform").classList.remove("invisible");
@@ -428,7 +451,9 @@ document.getElementById("form4submit").addEventListener("click", function(event)
 
                     document.getElementById("nav").classList.add("fadeOut");
 
+                    document.getElementById("blurPlane").classList.add("blur");
                     setTimeout(function() {
+                        document.getElementById("blurPlane").classList.remove("blur");
                         document.getElementById("nav").classList.add("invisible");
                         form4.classList.add("invisible");
                         document.getElementById("checkboxform").classList.remove("invisible");
@@ -454,10 +479,7 @@ document.getElementById("form4submit").addEventListener("click", function(event)
 
 document.getElementById("checkboxSubmit").addEventListener("click", function(event) {
     event.preventDefault();
-    console.log(sceneIndex);
     if(sceneIndex === 5 && checkboxTicked === true){
-
-
         /*document.getElementById("indexText4").classList.remove("fadeInText");
         document.getElementById("indexText3").classList.add("fadeOutText");
         document.getElementById("indexText4").classList.remove("invisibleText");
@@ -516,7 +538,9 @@ document.getElementById("checkboxSubmit").addEventListener("click", function(eve
             document.getElementById("checkboxform").classList.remove("visible");
             document.getElementById("checkboxform").classList.remove("fadeIn");
             document.getElementById("checkboxform").classList.add("fadeOut");
+            document.getElementById("blurPlane").classList.add("blur");
             setTimeout(function() {
+                document.getElementById("blurPlane").classList.remove("blur");
                 document.getElementById("checkboxform").classList.add("invisible");
                 outro1.classList.remove("invisible");
                 outro1.classList.remove("fadeOut");
@@ -530,7 +554,9 @@ document.getElementById("checkboxSubmit").addEventListener("click", function(eve
             document.getElementById("outro1").children[0].innerHTML = "VERIFICATION FAILED";
             document.getElementById("outro1").children[1].innerHTML = "PLEASE MAKE SURE ALL DETAILS ENTERED ARE CORRECT";
             document.getElementById("continueOutro1").value = "UPDATE YOUR DETAILS";
+            document.getElementById("blurPlane").classList.add("blur");
             setTimeout(function() {
+                document.getElementById("blurPlane").classList.remove("blur");
                 document.getElementById("checkboxform").classList.add("invisible");
                 outro1.classList.remove("invisible");
                 outro1.classList.remove("fadeOut");
@@ -579,7 +605,9 @@ outro1.addEventListener("submit", function(event) {
         //fade out nav
        // document.getElementById("nav").classList.add("fadeOut");
 
-        setTimeout(function() {
+       document.getElementById("blurPlane").classList.add("blur");
+       setTimeout(function() {
+           document.getElementById("blurPlane").classList.remove("blur");
             outro1.classList.add("invisible");
             outro2.classList.remove("invisible");
             outro2.classList.remove("fadeOut");

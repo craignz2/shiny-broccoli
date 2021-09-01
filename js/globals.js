@@ -1,5 +1,6 @@
 var mesh;
 var newSphere;
+var sphere_geometry;
 
 var blurOut = false;
 var currBlur = 0.8;
@@ -58,7 +59,7 @@ function forceInputUppercase(e)
 
   var colsF = new THREE.Vector3(0xc28b00,0xdd0080,0x622b85);
   var colsM = new THREE.Vector3(0x52ffdc,0x00c3ff,0x8400ff);
-  var colsO = new THREE.Vector3(0xffff75,0xff75bc,0x8f0049);
+  var colsO = new THREE.Vector3(0xffff75,0xff75bc,0x009434);
 
   var colsCurr = new THREE.Vector3(colsF.x,colsF.y,colsF.z);
 
@@ -70,44 +71,39 @@ function forceInputUppercase(e)
     color: new THREE.Color(colsCurr.y)
   }, {
     stop: .25,
-    color: new THREE.Color(colsCurr.z)
-  }, {
-    stop: .75,
     color: new THREE.Color(colsCurr.y)
   }, {
+    stop: .75,
+    color: new THREE.Color(colsCurr.z)
+  }, {
     stop: 1,
-    color: new THREE.Color(colsCurr.x)
+    color: new THREE.Color(colsCurr.y)
   }];
 
-  function setGradient(sphere_geometry, colors, axis, reverse) {
-    newSphere.geometry.colorsNeedUpdate = true
-    sphere_geometry.computeBoundingBox();
+  var vertexIndices = ['a', 'b', 'c'];
+  var face, vertex, normalized = new THREE.Vector3(),
+  normalizedAxis = 0;
+  var faceslength;
+
+function setGradient(/*sphere_geometry, colors, axis, reverse*/) {
+  var colors = cols;
+  sphere_geometry.computeBoundingBox();
+  var bbox = sphere_geometry.boundingBox;
+  var size = new THREE.Vector3().subVectors(bbox.max, bbox.min);
   
-    var bbox = sphere_geometry.boundingBox;
-    var size = new THREE.Vector3().subVectors(bbox.max, bbox.min);
-   
-    var vertexIndices = ['a', 'b', 'c'];
-    var face, vertex, normalized = new THREE.Vector3(),
-      normalizedAxis = 0;
-  
-    for (var c = 0; c < colors.length - 1; c++) {
-  
-      var colorDiff = colors[c + 1].stop - colors[c].stop;
-  
-      for (var i = 0; i < sphere_geometry.faces.length; i++) {
-        face = sphere_geometry.faces[i];
-        for (var v = 0; v < 3; v++) {
-          vertex = sphere_geometry.vertices[face[vertexIndices[v]]];
-          normalizedAxis = normalized.subVectors(vertex, bbox.min).divide(size)[axis];
-          if (reverse) {
-            normalizedAxis = 1 - normalizedAxis;
-          }
-          if (normalizedAxis >= colors[c].stop && normalizedAxis <= colors[c + 1].stop) {
-            var localNormalizedAxis = (normalizedAxis - colors[c].stop) / colorDiff;
-            face.vertexColors[v] = colors[c].color.clone().lerp(colors[c + 1].color, localNormalizedAxis);
-          }
+  for (let c = 0; c < 5 - 1; c++) {
+    var colorDiff = colors[c + 1].stop - colors[c].stop;
+    for (let i = 0; i < faceslength; i++) {
+      face = sphere_geometry.faces[i];
+      for (let v = 0; v < 3; v++) {
+        vertex = sphere_geometry.vertices[face[vertexIndices[v]]];
+        normalizedAxis = 1 - normalized.subVectors(vertex, bbox.min).divide(size)['z'];
+        if (normalizedAxis >= colors[c].stop && normalizedAxis <= colors[c + 1].stop) {
+          var localNormalizedAxis = (normalizedAxis - colors[c].stop) / colorDiff;
+          face.vertexColors[v] = colors[c].color.clone().lerp(colors[c + 1].color, localNormalizedAxis);
         }
       }
     }
-    sphere_geometry.elementsNeedUpdate = true;
   }
+  sphere_geometry.elementsNeedUpdate = true;
+}

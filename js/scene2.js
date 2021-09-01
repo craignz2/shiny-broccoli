@@ -8,15 +8,16 @@ var prevAudioIndex2 = -1;
 var navAlpha2 = 0;
 
 scene2 = new THREE.Group();
+scene2b = new THREE.Group();
 scene2.position.z = -5;
 
 point = new THREE.PointLight( 0xffffff, 5 );
 point.position.set(0,0,50);
 //scene2.add(point);
 
-var sphere_geometry = new THREE.SphereGeometry(1, 128, 128);
+sphere_geometry = new THREE.SphereGeometry(1, 128, 128);
 sphere_geometry.colorsNeedUpdate = true;
-
+faceslength = sphere_geometry.faces.length;
 
 const directionalLight2 = new THREE.AmbientLight( 0xffffff, 1 );
 scene2.add( directionalLight2 );
@@ -184,35 +185,34 @@ const textureCube = loader.load( [
 	'py.png', 'ny.png',
 	'pz.png', 'nz.png'
 ]  /*['StandardCubeMap.png']*/);
+const textureCube2 = loader.load( [
+	'white.jpg', 'white.jpg',
+	'white.jpg', 'white.jpg',
+	'white.jpg', 'white.jpg'
+]  /*['StandardCubeMap.png']*/);
 loader.mapping = THREE.CubeRefractionMapping;
 
-
-
-material3 = new THREE.MeshPhysicalMaterial({
-    envMap: textureCube,
+/*material3 = new THREE.MeshPhysicalMaterial({
     //refractionRatio: 5
+    envMap: textureCube,
 });
 
-material3.roughness = 0.; 
-material3.metalness = 1.;
-material3.transparent = true;
-material3.opacity = .75;
-material3.premultipliedAlpha = true;
-material3.envMapIntensity = 5;
+material3.roughness = 1.; 
+material3.metalness = 0.;
+material3.opacity = 1;
 material3.side = THREE.BackSide;
-material3.vertexColors = THREE.VertexColors;
+material3.vertexColors = THREE.VertexColors;*/
 
 material4 = new THREE.MeshPhysicalMaterial({
     envMap: textureCube,
-    //refractionRatio: 5
 });
 
-material4.roughness = 0.; 
-material4.metalness = 1.;
+material4.roughness = 1.; 
+material4.metalness = 0.;
 material4.transparent = true;
 material4.opacity = .5;
 material4.premultipliedAlpha = true;
-material4.envMapIntensity = 10;
+material4.envMapIntensity = 0;
 material4.side = THREE.FrontSide;
 material4.vertexColors = THREE.VertexColors;
 
@@ -223,19 +223,19 @@ material4.vertexColors = THREE.VertexColors;
 
 //scene2.add(mesh);
 
-newSphere = new THREE.Mesh(sphere_geometry, material3);
+//newSphere = new THREE.Mesh(sphere_geometry, material3);
 newSphere2 = new THREE.Mesh(sphere_geometry, material4);
 setGradient(sphere_geometry, cols, 'z', rev);
 sphere_geometry.colorsNeedUpdate = true;
 scene2.add(newSphere2);
-scene2.add(newSphere);
+//scene2.add(newSphere);
 
-scene2.layers.set(0);
-newSphere.layers.set(0);
+//scene2.layers.set(0);
+//newSphere.layers.set(0);
 
-newSphere.scale.x = 0;
+/*newSphere.scale.x = 0;
 newSphere.scale.y = 0;
-newSphere.scale.z = 0;
+newSphere.scale.z = 0;*/
 
 newSphere2.scale.x = 0;
 newSphere2.scale.y = 0;
@@ -253,18 +253,18 @@ var speed = 0.0002;
 
 function updateScene2(){
     if(orbScaleIn === true){
-        if(newSphere.scale.x === 0){
-            newSphere.scale.x = 0.02;
+        if(newSphere2.scale.x === 0){
+            /*newSphere.scale.x = 0.02;
             newSphere.scale.y = 0.02;
-            newSphere.scale.z = 0.02;
+            newSphere.scale.z = 0.02;*/
             newSphere2.scale.x = 0.02;
             newSphere2.scale.y = 0.02;
             newSphere2.scale.z = 0.02;
         }
-        else if(newSphere.scale.x < 5){
-            newSphere.scale.x +=((5-newSphere.scale.x)*.02);
+        else if(newSphere2.scale.x < 5){
+            /*newSphere.scale.x +=((5-newSphere.scale.x)*.02);
             newSphere.scale.y +=((5-newSphere.scale.y)*.02);
-            newSphere.scale.z +=((5-newSphere.scale.z)*.02);
+            newSphere.scale.z +=((5-newSphere.scale.z)*.02);*/
             newSphere2.scale.x +=((5-newSphere2.scale.x)*.02);
             newSphere2.scale.y +=((5-newSphere2.scale.y)*.02);
             newSphere2.scale.z +=((5-newSphere2.scale.z)*.02);
@@ -304,33 +304,30 @@ function updateScene2(){
     var y = THREE.Math.lerp(material2.uniforms.year.value, year, 0.01);//0.01 = value smoothing
     material2.uniforms.year.value = y;*/
 
-
-    var k = .5;
-    var d2 = THREE.Math.lerp(k, (day*100/52)+.5, 0.01);
-    k = d2;
-
+    var d2 = THREE.Math.lerp(.5, (day*100/52)+.5, 0.01);
 
     var x = (month/48000)+.0002;
 
-    //var m2 = THREE.Math.lerp(speed, x, 0.00001);
     var m2 = THREE.Math.lerp(speed, x, 0.001);
     speed = m2;
     var time = performance.now() * m2;
 
     var y = 1-(year/180);
     
-    for (var i = 0; i < newSphere.geometry.vertices.length; i++) {
-        var p = newSphere.geometry.vertices[i];
-        p.normalize().multiplyScalar(1 + y * noise.perlin3(p.x * d2 + time, p.y * d2, p.z * d2));
-    }
-    newSphere.geometry.computeVertexNormals();
-    newSphere.geometry.normalsNeedUpdate = true;
-    newSphere.geometry.verticesNeedUpdate = true;
-
     for (var i = 0; i < newSphere2.geometry.vertices.length; i++) {
+        //var p = newSphere.geometry.vertices[i];
+        var p2 = newSphere2.geometry.vertices[i];
+        //p.normalize().multiplyScalar(1 + y * noise.perlin3(p.x * d2 + time, p.y * d2, p.z * d2));
+        p2.normalize().multiplyScalar(1 + y * noise.perlin3(p2.x * d2 + time, p2.y * d2, p2.z * d2));
+    }
+    /*newSphere.geometry.computeVertexNormals();
+    newSphere.geometry.normalsNeedUpdate = true;
+    newSphere.geometry.verticesNeedUpdate = true;*/
+
+    /*for (var i = 0; i < newSphere2.geometry.vertices.length; i++) {
         var p = newSphere2.geometry.vertices[i];
         p.normalize().multiplyScalar(1 + y * noise.perlin3(p.x * d2 + time, p.y * d2, p.z * d2));
-    }
+    }*/
     newSphere2.geometry.computeVertexNormals();
     newSphere2.geometry.normalsNeedUpdate = true;
     newSphere2.geometry.verticesNeedUpdate = true;

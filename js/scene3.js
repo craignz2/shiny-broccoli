@@ -4,6 +4,23 @@ var scrolled = false;
 var navAlpha3 = 0;
 var g;
 var prevg;
+var animVal = 0;
+
+const lerpColor = function(a, b, amount) {
+    const ar = a >> 16,
+          ag = a >> 8 & 0xff,
+          ab = a & 0xff,
+
+          br = b >> 16,
+          bg = b >> 8 & 0xff,
+          bb = b & 0xff,
+
+          rr = ar + amount * (br - ar),
+          rg = ag + amount * (bg - ag),
+          rb = ab + amount * (bb - ab);
+
+    return (rr << 16) + (rg << 8) + (rb | 0);
+};
 
 function updateScene3(){
     if(navIn3 && navAlpha3<1){
@@ -38,25 +55,24 @@ function updateScene3(){
     //var c = THREE.Math.lerp(material2.uniforms.colorU.value, .8-((gender*2/10)), 0.01);//0.01 = value smoothing
     //material2.uniforms.colorU.value = 1.;
     //material2.uniforms.gender.value = gender;
-    if(gender >= 0){
+    /*if(gender >= 0){
         g = Math.round(gender)-1;
     }
-
-    /*if(prevg!==g){
         if(g <0.5){//f
-            colsCurr.x= colsF.x;
-            colsCurr.y= colsF.y;
-            colsCurr.z= colsF.z;
+            //console.log(colsCurr.distanceTo(colsF));
+            colsCurr.x= lerpColor(colsCurr.x, colsF.x, 0.3);
+            colsCurr.y= lerpColor(colsCurr.y, colsF.y, 0.3);
+            colsCurr.z= lerpColor(colsCurr.z, colsF.z, 0.3);
         }
         else if(g>= 0.5 && g < 1.5){//m
-            colsCurr.x= colsM.x;
-            colsCurr.y= colsM.y;
-            colsCurr.z= colsM.z;
+            colsCurr.x= lerpColor(colsCurr.x, colsM.x, 0.3);
+            colsCurr.y= lerpColor(colsCurr.y, colsM.y, 0.3);
+            colsCurr.z= lerpColor(colsCurr.z, colsM.z, 0.3);
         }
         else if(g>=1.5 && g < 2.5){//o
-            colsCurr.x= colsO.x;
-            colsCurr.y= colsO.y;
-            colsCurr.z= colsO.z;
+            colsCurr.x= lerpColor(colsCurr.x, colsO.x, 0.3);
+            colsCurr.y= lerpColor(colsCurr.y, colsO.y, 0.3);
+            colsCurr.z= lerpColor(colsCurr.z, colsO.z, 0.3);
         }
         cols = [{
             stop: 0,
@@ -74,10 +90,10 @@ function updateScene3(){
             stop: 1,
             color: new THREE.Color(colsCurr.x)
         }];
-        setGradient(sphere_geometry, cols, 'z', rev);
-        prevg = g;
-    }*/
-    
+          
+        setGradient();*/
+        //sphere_geometry.colorsNeedUpdate = true;
+       
     /*else if(g>=3.5 && g < 4.5){
         material2.uniforms.gender.value = THREE.Math.lerp(material2.uniforms.gender.value, 2.0, 0.05);
         material2.uniforms.colorU.value = THREE.Math.lerp(material2.uniforms.colorU.value, 0.0, 0.05);
@@ -87,6 +103,50 @@ function updateScene3(){
         material2.uniforms.colorU.value = THREE.Math.lerp(material2.uniforms.colorU.value, 0.0, 0.05);
     }*/
 };
+
+function animColor(){
+    if(animVal<1){
+        console.log(animVal);
+        animVal+=.1;
+        if(gender >= 0){
+            g = Math.round(gender)-1;
+        }
+        if(g <0.5){//f
+            //console.log(colsCurr.distanceTo(colsF));
+            colsCurr.x= lerpColor(colsCurr.x, colsF.x, animVal);
+            colsCurr.y= lerpColor(colsCurr.y, colsF.y, animVal);
+            colsCurr.z= lerpColor(colsCurr.z, colsF.z, animVal);
+        }
+        else if(g>= 0.5 && g < 1.5){//m
+            colsCurr.x= lerpColor(colsCurr.x, colsM.x, animVal);
+            colsCurr.y= lerpColor(colsCurr.y, colsM.y, animVal);
+            colsCurr.z= lerpColor(colsCurr.z, colsM.z, animVal);
+        }
+        else if(g>=1.5 && g < 2.5){//o
+            colsCurr.x= lerpColor(colsCurr.x, colsO.x, animVal);
+            colsCurr.y= lerpColor(colsCurr.y, colsO.y, animVal);
+            colsCurr.z= lerpColor(colsCurr.z, colsO.z, animVal);
+        }
+        cols = [{
+            stop: 0,
+            color: new THREE.Color(colsCurr.x)
+        }, {
+            stop: .15,
+            color: new THREE.Color(colsCurr.y)
+        }, {
+            stop: .25,
+            color: new THREE.Color(colsCurr.z)
+        }, {
+            stop: .75,
+            color: new THREE.Color(colsCurr.y)
+        }, {
+            stop: 1,
+            color: new THREE.Color(colsCurr.x)
+        }];
+        setGradient();
+        window.setTimeout(animColor, 50);
+    }
+}
 
 document.getElementById("gender").addEventListener("scroll", function(){
     if(scrolled === false){
@@ -102,8 +162,6 @@ document.getElementById("gender").addEventListener("scroll", function(){
 
     scrolled = true;
     gender = document.getElementById("gender").scrollTop/100;
-    console.log(gender);
-
 
     //female>male>other
 
@@ -122,6 +180,12 @@ document.getElementById("gender").addEventListener("scroll", function(){
     }
     if(Math.round(gender)-1 < 0){
         audioIndex3 = -1;
+    }
+    if(Math.round(gender) !== prevg){
+        animVal = 0;
+        console.log("call color change");
+        animColor();
+        prevg = Math.round(gender);
     }
 
    /* if(genre === 1){

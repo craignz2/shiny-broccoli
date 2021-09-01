@@ -319,7 +319,6 @@ document.getElementById("fname").addEventListener("keyup", (event) => {
         document.getElementById("skipmiddlename").classList.add("fadeIn");
         submitEnabledf = true;
     }
-
  
 });
 
